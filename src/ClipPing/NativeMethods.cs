@@ -24,7 +24,16 @@ internal static class NativeMethods
     public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
     [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool GetMonitorInfo(HandleRef hmonitor, MONITORINFO info);
+    public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, out RECT lpRect, int cPoints);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool IsZoomed(IntPtr hWnd);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern bool GetMonitorInfo(IntPtr hmonitor, MONITORINFO info);
 
     [DllImport("user32.dll", SetLastError = true)]
     public static extern bool AddClipboardFormatListener(IntPtr hwnd);
