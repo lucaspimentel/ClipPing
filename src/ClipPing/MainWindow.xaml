@@ -12,7 +12,9 @@
         Height="50"
         IsHitTestVisible="False"
         ShowActivated="False"
-        AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize">
+        AllowsTransparency="True"
+        WindowStyle="None"
+        ResizeMode="NoResize">
     <Window.Resources>
         <Storyboard x:Key="ShowStoryboard"
                     Storyboard.Target="{Binding ElementName=Window}"

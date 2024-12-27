@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 
@@ -11,6 +12,20 @@ public partial class MainWindow : Window
         InitializeComponent();
         Loaded += MainWindow_Loaded;
         ComponentDispatcher.ThreadFilterMessage += ComponentDispatcher_ThreadFilterMessage;
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+
+        var handle = new WindowInteropHelper(this).Handle;
+        var extendedStyle = NativeMethods.GetWindowLong(handle, NativeMethods.GWL_EXSTYLE);
+
+        // Add WS_EX_TRANSPARENT style to allow clicks to pass through
+        _ = NativeMethods.SetWindowLong(
+            handle,
+            NativeMethods.GWL_EXSTYLE,
+            extendedStyle | NativeMethods.WS_EX_TRANSPARENT);
     }
 
     private void ShowOnActiveWindow()

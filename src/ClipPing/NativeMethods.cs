@@ -5,6 +5,14 @@ namespace Kookiz.ClipPing;
 internal static class NativeMethods
 {
     public const int MONITOR_DEFAULTTONEAREST = 0x00000002;
+    public const int GWL_EXSTYLE = -20;
+    public const int WS_EX_TRANSPARENT = 0x00000020;
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
     [DllImport("user32.dll")]
     public static extern IntPtr MonitorFromWindow(IntPtr handle, Int32 flags);
