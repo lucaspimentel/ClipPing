@@ -49,13 +49,18 @@ public partial class App : Application
     private IOverlay LoadOverlay()
     {
         // TODO: Add a way to pick what overlay to use
-        var overlay = new TopOverlay { ShowInTaskbar = false, ShowActivated = false };
+        var overlay = new TopOverlay
+        {
+            ShowInTaskbar = false,
+            ShowActivated = false,
+            Topmost = true
+        };
 
         overlay.SourceInitialized += (s, e) =>
         {
             var handle = new WindowInteropHelper(overlay).Handle;
             var extendedStyle = NativeMethods.GetWindowLong(handle, NativeMethods.GWL_EXSTYLE);
-            
+
             // Add WS_EX_TRANSPARENT style to allow clicks to pass through
             _ = NativeMethods.SetWindowLong(
                 handle,
