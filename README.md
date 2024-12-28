@@ -1,7 +1,7 @@
 # clip-ping
 Displays a visual notification in the active window when the clipboard is updated.
 
-Launching the app adds an icon in the the tray. Right-click -> Exit to exit.
+Launching the app adds an icon in the tray. Right-click -> Exit to exit.
 
 The app is written with .NET 9 and requires at least Windows 10 version 1607.
 
