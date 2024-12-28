@@ -1,6 +1,7 @@
 ﻿using Hardcodet.Wpf.TaskbarNotification;
 using Kookiz.ClipPing;
 using Kookiz.ClipPing.Overlays;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -89,31 +90,16 @@ public partial class App : Application
             return;
         }
 
-        // 2) Get bounding rectangle in device coordinates
-        NativeMethods.RECT rect;
+        // Get bounding rectangle in device coordinates
+        var hr = NativeMethods.DwmGetWindowAttribute(
+            hwnd,
+            NativeMethods.DWMWA_EXTENDED_FRAME_BOUNDS,
+            out NativeMethods.RECT rect,
+            Marshal.SizeOf(typeof(NativeMethods.RECT)));
 
-        if (NativeMethods.IsZoomed(hwnd))
+        if (hr != 0)
         {
-            // If the window is maximized, the title bar is offscreen.
-            // Use GetClientRect to get the client area.
-            if (!NativeMethods.GetClientRect(hwnd, out rect))
-            {
-                return;
-            }
-
-            // Client area is relative to the window, convert to absolute coordinates
-            if (!NativeMethods.MapWindowPoints(hwnd, IntPtr.Zero, out rect, 2))
-            {
-                return;
-            }
-        }
-        else
-        {
-            // If the window isn't maximize, use GetWindowRect to get the full window area
-            if (!NativeMethods.GetWindowRect(hwnd, out rect))
-            {
-                return;
-            }
+            return;
         }
 
         int windowWidthPx = rect.Right - rect.Left;
@@ -124,50 +110,19 @@ public partial class App : Application
             return;
         }
 
-        // 2) Determine which monitor this window is on
-        var monitor = NativeMethods.MonitorFromWindow(hwnd, NativeMethods.MONITOR_DEFAULTTONEAREST);
-
-        var monitorInfo = new NativeMethods.MONITORINFO();
-        NativeMethods.GetMonitorInfo(monitor, monitorInfo);
-
-        // 3) Convert device coordinates => WPF coordinates (DIPs)
-        int hr = NativeMethods.GetDpiForMonitor(
-            monitor,
-            NativeMethods.MonitorDpiType.MDT_Effective_DPI,
-            out var dpiX,
-            out var dpiY);
-
-        if (hr != 0)
-        {
-            // Fallback if GetDpiForMonitor failed. Assume 96 DPI (100% scaling)
-            dpiX = 96;
-            dpiY = 96;
-        }
+        // Get DPI of the window
+        var dpi = NativeMethods.GetDpiForWindow(hwnd);
 
         // Convert device pixels -> WPF device-independent pixels (DIPs)
         // 1 DIP = 1 px at 96 DPI. So the scale factor is (96 / actualDPI)
-        double scaleX = 96.0 / dpiX;
-        double scaleY = 96.0 / dpiY;
+        double scale = 96.0 / dpi;
 
-        var left = rect.Left;
-        var top = rect.Top;
+        double leftDIPs = rect.Left * scale;
+        double topDIPs = rect.Top * scale;
+        double widthDIPs = windowWidthPx * scale;
+        double heightDIPs = windowHeightPx * scale;
 
-        if (left < monitorInfo.Work.Left)
-        {
-            left = monitorInfo.Work.Left;
-        }
-
-        if (top < monitorInfo.Work.Top)
-        {
-            top = monitorInfo.Work.Top;
-        }
-
-        double leftDIPs = rect.Left * scaleX;
-        double topDIPs = rect.Top * scaleY;
-        double widthDIPs = windowWidthPx * scaleX;
-        double heightDIPs = windowHeightPx * scaleY;
-
-        // 4) Show the overlay window
+        // Show the overlay window
         _overlay?.Show(new(leftDIPs, topDIPs, widthDIPs, heightDIPs));
     }
 
