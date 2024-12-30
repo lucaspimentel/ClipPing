@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using Avalonia;
 
 namespace Kookiz.ClipPing;
 internal interface IOverlay
 {
-    void Show(Rect area);
+    Task ShowAsync(Rect area);
 }

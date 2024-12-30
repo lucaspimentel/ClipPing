@@ -1,27 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <RootNamespace>Kookiz.ClipPing</RootNamespace>
-    <PublishSingleFile>true</PublishSingleFile>
-    <Version>0.1.0</Version>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <RootNamespace>Kookiz.ClipPing</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PublishAot>true</PublishAot>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="clipboard.ico" />
+    <PackageReference Include="Avalonia" Version="11.3.999-cibuild0054097-alpha" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.999-cibuild0054097-alpha" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.999-cibuild0054097-alpha" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.999-cibuild0054097-alpha" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.999-cibuild0054097-alpha">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
+    <AvaloniaResource Include="clipboard.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="clipboard.ico" />
+    <Compile Update="Overlays\TopOverlay.axaml.cs">
+      <DependentUpon>TopOverlay.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
-
 </Project>
