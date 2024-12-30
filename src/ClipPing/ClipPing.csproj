@@ -9,6 +9,7 @@
     <RootNamespace>Kookiz.ClipPing</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <PublishAot>true</PublishAot>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
