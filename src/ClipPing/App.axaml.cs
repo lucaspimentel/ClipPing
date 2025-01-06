@@ -12,7 +12,7 @@ public partial class App : Application
     /// <summary>
     /// A window used only for the message loop
     /// </summary>
-    private Window _dummyWindow;
+    private Window? _dummyWindow;
 
     public override void Initialize()
     {

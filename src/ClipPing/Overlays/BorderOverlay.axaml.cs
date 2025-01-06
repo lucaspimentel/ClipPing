@@ -19,11 +19,12 @@ public partial class BorderOverlay : Window, IOverlay
 
         Show();
 
-        var appear = (Animation)Resources["Appear"];
-        var disappear = (Animation)Resources["Disappear"];
-
-        await appear.RunAsync(this);
-        await disappear.RunAsync(this);
+        if(Resources["Appear"] is Animation appear &&
+           Resources["Disappear"] is Animation disappear)
+        {
+            await appear.RunAsync(this);
+            await disappear.RunAsync(this);
+        }
 
         Close();
     }
