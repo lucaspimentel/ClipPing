@@ -21,11 +21,11 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore src/ClipPing/ClipPing.csproj
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build src/ClipPing/ClipPing.csproj --no-restore
     - name: Publish
-      run: dotnet publish --no-restore --no-build
+      run: dotnet publish src/ClipPing/ClipPing.csproj --no-restore --no-build
 #    - name: Test
 #      run: dotnet test --no-build --verbosity normal
 
