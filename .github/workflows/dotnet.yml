@@ -15,14 +15,15 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
-    - name: Publish
+    - name: dotnet publish
       run: dotnet publish src/ClipPing/ClipPing.csproj --configuration=release
-    - name: Upload a Build Artifact
+    - name: Upload Build Artifact
       uses: actions/upload-artifact@v4.5.0
       with:
         name: win-x64
