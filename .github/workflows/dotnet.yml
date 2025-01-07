@@ -1,0 +1,31 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: dotnet publish
+      run: dotnet publish src/ClipPing/ClipPing.csproj --configuration=release
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4.5.0
+      with:
+        name: win-x64
+        path: src/ClipPing/bin/release/net9.0/win-x64/publish/
+        if-no-files-found: error
